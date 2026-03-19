@@ -1,0 +1,10 @@
+#root {
+  width: 35ch;
+  margin: 0 auto;
+}
+
+form,
+label {
+  display: grid;
+  gap: 0.25rem;
+}

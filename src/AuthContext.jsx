@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
+
 const API = "https://fsa-jwt-practice.herokuapp.com";
 const AuthContext = createContext();
 
@@ -12,11 +13,11 @@ export function AuthProvider({ children }) {
 
     if (savedToken) {
       setToken(savedToken);
-      setLocation("TABLET"); // skip entrance if already signed in
+      setLocation("TABLET");
     }
   }, []);
 
-  // TODO: signup
+  // signup
   async function signup(username) {
     setError("");
 
@@ -27,7 +28,7 @@ export function AuthProvider({ children }) {
       },
       body: JSON.stringify({
         username,
-        password: "password123", // needed for API
+        password: "password123",
       }),
     });
 
@@ -43,13 +44,12 @@ export function AuthProvider({ children }) {
     setLocation("TABLET");
   }
 
-  // TODO: authenticate
+  // authenticate 
   async function authenticate() {
     setError("");
 
     if (!token) {
-      setError("No token found");
-      return;
+      throw new Error("No token found");
     }
 
     const response = await fetch(`${API}/authenticate`, {
@@ -63,8 +63,7 @@ export function AuthProvider({ children }) {
     const result = await response.json();
 
     if (!response.ok || !result.success) {
-      setError(result.message || "Authentication failed");
-      return;
+      throw new Error(result.message || "Authentication failed");
     }
 
     setLocation("TUNNEL");
